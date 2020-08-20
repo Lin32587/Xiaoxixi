@@ -1,0 +1,39 @@
+$xblue:#1D3156 ;
+$xPhbg:#f4f5f6;
+$xPhcolor:#c0c4cc;
+
+@import 'uview-ui/theme.scss';
+
+@mixin xCenter {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+@mixin xBtn {
+	width: 100%;
+	background: #1D3156;
+	color: #fff;
+	height: 80rpx;
+	border-radius: 40rpx;
+	@include xCenter;
+	}
+	
+	
+@mixin mEllipsis{
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+
+@mixin singleEllipsis {
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+}
+
+.my_highlight {
+		color: #f9d118 !important;
+	}
