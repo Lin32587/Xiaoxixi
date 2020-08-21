@@ -42,18 +42,20 @@
 				<PathList />
 			</view>
 			<view>
-				<u-popup v-model="show" mode="center" border-radius="14" width="94%" :mask="true">
+				<u-popup v-model="show" mode="center" border-radius="20" width="100%" :mask="true">
 					<view class="matrix">
-						<view class="matrix-text">
-							<text>| 矩阵</text>
-						</view>
-						<view class="matrix-cont">
-							<view class="matrix-cont-item" v-for="(item,idx) in matrixCont" :key='idx' @click="toPackge(item.url)">
-								<image :src="item.img"></image>
-								<text> {{item.text}} </text>
+						<view class="matrixMar">
+							<view class="matrix-text">
+								<text>| 矩阵</text>
 							</view>
+							<view class="matrix-cont">
+								<view class="matrix-cont-item" v-for="(item,idx) in matrixCont" :key='idx' @click="toPackge(item.url)">
+									<image :src="item.img"></image>
+									<text> {{item.text}} </text>
+								</view>
+							</view>
+							<view><button size="mini" @click="show = false">确认</button></view>
 						</view>
-						<view><button size="mini" @click="show = false">确认</button></view>
 					</view>
 				</u-popup>
 			</view>
@@ -93,27 +95,14 @@
 					},
 					{
 						name: '矩阵',
-						count: 0
+						count: 3
 					},
 				],
-				matrixCont: [{
+				matrixCont: [
+					{
 						img: "../../static/matrix/xRic.png",
 						text: "X-RIC",
-						url: "http://mp.weixin.qq.com/mp/homepage?__biz=MzU4MDYwNDE3Nw==&hid=11&sn=1b8611bb61406e88ca5a15c3d74dca46&scene=18#wechat_redirect"
-					},
-					{
-						img: "../../static/matrix/xRic.png",
-						text: "X-TALK",
-						url: ""
-					},
-					{
-						img: "../../static/matrix/fzth.png",
-						text: "FTZH方舟同航",
-						url: "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzU4MDYwNDE3Nw==#wechat_redirect）"
-					}, {
-						img: "../../static/matrix/xiaoxixi.png",
-						text: "X-CAMPUS",
-						url: ""
+						url: "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzU2Njc0NjE1MA==#wechat_redirect"
 					},
 					{
 						img: "../../static/matrix/ostrichPlan.png",
@@ -123,9 +112,9 @@
 					{
 						img: "../../static/matrix/fzth.png",
 						text: "X-EXPERT",
-						url: ""
+						url: "http://mp.weixin.qq.com/mp/homepage?__biz=MzU4MDYwNDE3Nw==&hid=11&sn=1b8611bb61406e88ca5a15c3d74dca46&scene=18#wechat_redirect"
 					}
-				]
+				],
 			}
 		},
 		methods: {
@@ -149,10 +138,9 @@
 				}
 			},
 			toPackge(url) {
-				uni.switchTab({
-					url: url
-				})
-				console.log(url)
+				uni.navigateTo({
+					url:"/mine/webView?url=" + encodeURIComponent(url)
+				});
 			},
 			toEditPage() {
 				uni.navigateTo({
@@ -403,45 +391,50 @@
 	}
 
 	// 矩阵
-	.matrix {
+	.matrix{
 		display: flex;
 		flex-direction: column;
-		width: 100%;
-		height: 700rpx;
-		background-color: #ffffff;
-
-		.matrix-cont {
+		width: 99%;
+		padding: 40rpx 3%;
+		// -moz-box-shadow: inset 0 0 10px #06c;
+		//     -webkit-box-shadow: inset 0 0 10px #06c;
+		//     box-shadow: inset 0 0 10px #06c;
+		.matrixMar{
+			width: 94%;
+			-moz-box-shadow:  2px 2px 10px #ccc;
+			-webkit-box-shadow:  2px 2px 10px #ccc;
+			box-shadow:  2px 2px 10px #ccc;
+			background-color: white;
+			border-radius: 15px;
+		}
+		.matrix-cont{
 			display: flex;
 			flex-direction: row;
 			flex-wrap: wrap-reverse;
 			justify-content: center;
-
-			.matrix-cont-item {
+			.matrix-cont-item{
 				width: 205rpx;
-				height: 190rpx;
+				height: 180rpx;
 				border-radius: 5px;
 				text-align: center;
 				margin-bottom: 20rpx;
-
-				image {
+				image{
 					display: block;
 					width: 110rpx;
 					height: 110rpx;
-					margin: 0px 50rpx 20rpx;
+					margin: 0px 50rpx 10rpx;
 				}
 			}
 		}
-
-		.matrix-text {
-			margin: 40rpx 0rpx 50rpx 76rpx;
+		.matrix-text{
+			margin:40rpx 0rpx 40rpx 76rpx;
 			font-size: 32rpx;
 			color: #1D3156;
 			font-weight: bold;
 		}
-
-		button {
+		button{
 			width: 460rpx;
-			margin: 20rpx 104rpx 0rpx;
+			margin: 0rpx 120rpx 50rpx;
 			background: #1D3156;
 			color: white;
 			border-radius: 130rpx;

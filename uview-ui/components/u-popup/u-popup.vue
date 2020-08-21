@@ -381,7 +381,7 @@ export default {
 	display: block;
 	/* #endif */
 	position: relative;
-	background-color: #ffffff;
+	// background-color: #ffffff;
 }
 
 .u-drawer-content-visible.u-drawer-center {

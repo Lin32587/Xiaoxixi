@@ -40,7 +40,7 @@
 						<view class="time">{{item.CreateAt|timeFilter(this)}}</view>
 						<view class="m_bottom" @click="addRelpy(item,idx)">{{item.Content}}</view>
 						<comment slot="reply" :userdata="sitem.User" v-for="(sitem,sidx) in item.Reply" :key="sidx">
-							<view class="m_bottom">
+							<view class="m_bottom" style="margin-left: 20rpx;">
 								<span class="fstrong">@{{item.User.username}}</span>
 								{{sitem.Content}}
 							</view>
@@ -57,15 +57,11 @@
 				<myloading :loading="listLoading"></myloading>
 			</view>
 		</view>
-		<view class="handle_bar" v-if="checkAuth">
-			<!-- <navigator class="bar_item" @click="toTransmit" :url="'/pages/circle/transmit?item='+ encodeURIComponent(JSON.stringify(sayingData))">
+		<view class="handle_bar">
+			<navigator class="bar_item" @click="toTransmit" :url="'/pages/circle/transmit?item='+ encodeURIComponent(JSON.stringify(sayingData))">
 				<u-icon name="zhuanfa" color="#DADCE3" size="36"></u-icon>
 				<span>转发</span>
-			</navigator> -->
-			<button class="bar_item share_btn" open-type="share" @click="share" type="default">
-				<u-icon name="zhuanfa" color="#DADCE3" size="36"></u-icon>
-				<span>转发</span>
-			</button>
+			</navigator>
 			<view class="bar_item borders" @click="norComment">
 				<u-icon name="chat" color="#DADCE3" size="36"></u-icon>
 				<span>评论</span>
@@ -104,7 +100,6 @@
 		transmit,
 		addComment,
 		addReply,
-		addctransmit
 	} from "@/common/http.api.js";
 	import {
 		myToast,
@@ -121,13 +116,6 @@
 			editList,
 			myloading
 		},
-		computed:{
-			checkAuth:{
-				get(){
-					return this.$store.state.gAuth
-				}
-			}
-		},
 		filters: {
 			timeFilter(val) {
 				let FormatTime = ''
@@ -143,8 +131,8 @@
 					val = val.substr(0, val.length - 4)
 					FormatTime = parseInt(val.split("-")[1]) + "月" + parseInt(val.split("-")[2].split(
 						"T")[0]) + "日"
-				}else {
-					FormatTime = parseInt(val.substr(0,4)) + "年" + parseInt(val.substr(5,2)) + "月"
+				} else {
+					FormatTime = parseInt(val.substr(0, 4)) + "年" + parseInt(val.substr(5, 2)) + "月"
 				}
 				return FormatTime
 			}
@@ -194,19 +182,7 @@
 		onReachBottom() {
 			this.initCommentBox(true)
 		},
-		onShareAppMessage(res) {
-		    return {
-		        title:`${this.sayingData.Content}`,
-		        path:'pages/circle/circleDetail?id=' + this.id,
-		        imageUrl:'',
-		        desc:'',
-		        content:''
-		    }
-		},
 		methods: {
-			share(){
-				addctransmit({postId:parseInt(this.id),userId: this.$store.state.gUserid}).then().catch()
-			},
 			changeActive(idx) {
 				this.activeType = idx;
 				// this.pageIndex = 1
@@ -354,8 +330,8 @@
 			// 获取单个帖子
 			req_post(result) {
 				let data = {
-					Id: result.id || this.id ,
-					UserId:result.UserId || this.gUserid
+					Id: result.id || this.id,
+					UserId: result.UserId || this.gUserid
 				}
 				console.log(result)
 				post(data).then(res => {
@@ -514,7 +490,7 @@
 		word-wrap: break-word;
 		word-break: break-all;
 	}
-	
+
 	.time {
 		font-size: 20rpx;
 		// position: absolute;

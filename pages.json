@@ -148,6 +148,11 @@
 					"style": {
 						"navigationBarTitleText": "析贝"
 					}
+				},{
+					"path" : "webView",
+					"style" : {
+						"navigationBarTitleText": "跳转外部页面"
+					}
 				}
             ]
 		},

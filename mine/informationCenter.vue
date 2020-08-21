@@ -1,13 +1,12 @@
 <template>
 	<view class="wrapper">
-		<u-loadmore status="nomore" bg-color="#F5F6FA" v-if='list.length == 0'/>
 		<view class="msg_block" @click="toDynamic" v-if='unreadNum > 0'>
 			<view class="mini_avatar"></view>
 			<view class="msg">您有{{unreadNum}}条最新消息</view>
 		</view>
 		<view class="msg_list">
 			<view class="msg_brick" v-for="(item,idx) in list" :key="idx" @click="toPage(item.PostId,item.PostType)">
-				<view class="date"><span class="strong">{{list.length - idx}}</span>Sep</view>
+				<view class="date"><span class="strong">{{list.length - idx}}</span>{{item.time}}</view>
 				<view class="avatar">
 					<image :src="item.Images"></image>
 				</view>
@@ -19,7 +18,7 @@
 					<view class="u-line-1 content">{{item.Content}}</view>
 				</view>
 			</view>
-			<u-loadmore status="nomore" v-if='list.length > 0'/>
+			<u-loadmore status="nomore"/>
 		</view>
 	</view>
 </template>
@@ -29,17 +28,14 @@
 		unReadMessageCount,
 		message
 	} from '@/common/http.api.js'
-	import {
-		imgPath
-	} from '@/common/interface.js'
 	export default {
 		data() {
 			return {
-				imgPath: imgPath,
 				unreadNum: 0,
-				pageNum: 0,
-				list: []
-			};
+				pageNum: 1,
+				list: [],
+				usersId: ''
+			}
 		},
 		methods: {
 			toDynamic() {
@@ -49,7 +45,7 @@
 			},
 			req_unReadMessageCount(){
 				unReadMessageCount({
-					userId: 33
+					userId: this.usersId
 				}).then(res => {
 					if(res.code == 200){
 						this.unreadNum = res.data
@@ -58,29 +54,27 @@
 			},
 			req_message(pageN){
 				message({
-					userId: 33,
+					userId: this.usersId,
 					pageNum: pageN,
 					pageSize: 10
 				}).then(res => {
-					console.log(res)
-					if(res.code == 200){
-						if(res.totalPageNum > 1 && res.data.message.length >= 10){
-							this.filters(res.data.message)
-							this.list.push(...res.data.message)
-							this.onLeadMessage()
-						}
+					if(res.code == 200 && res.data != null){
 						this.filters(res.data.message)
+						this.filterIni(res.data.message)
 						this.list.push(...res.data.message)
 						this.list.reverse()
+						if(res.data.totalPageNum > res.data.pageNum){
+							this.onLeadMessage()
+						}
 					}
 				})
 			},
 			onLeadMessage(){
 				this.pageNum += 1
-				req_message(this.pageNum)
+				this.req_message(this.pageNum)
 			},
 			toPage(pageId,post_type){
-				let userId = 33
+				let userId = this.usersId
 				switch (post_type) {
 					case 1:
 						uni.navigateTo({
@@ -95,10 +89,28 @@
 				}
 				
 			},
+			filterIni(time){
+				let monthEnglish = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+				time.forEach((item)=>{
+					item.time = monthEnglish[new Date(new Date(item.CreateAt)).getMonth()]
+					// resData.yue = this.monthEnglish[new Date(new Date(item)).getMonth()]
+				})
+			}
 		},
 		onLoad(){
-			this.req_unReadMessageCount();
-			this.req_message(this.pageNum);
+			uni.getStorage({
+			    key: 'userId',
+			    success: res => {
+			        this.usersId = res.data
+					this.req_message(this.pageNum)
+					this.req_unReadMessageCount()
+			    }
+			})
+		},
+		onShow(){
+			if(this.usersId != ''){
+				this.req_unReadMessageCount()
+			}
 		}
 	}
 </script>
