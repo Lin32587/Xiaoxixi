@@ -4,7 +4,7 @@
 			<cityPanel :fatherAcive="cityChoose" @closeCity="handleCityEvent"></cityPanel>
 		</u-popup>
 
-		<swiper class="swiper" v-if="showlist.length>0" indicator-dots autoplay interval="1000" duration="500">
+		<swiper class="swiper" v-if="showlist.length>0" indicator-dots autoplay interval="4000" duration="500">
 			<swiper-item v-for="(item,idx) in showlist" :key="idx">
 				<image :src="item" class="swiper-item" mode="aspectFill"></image>
 			</swiper-item>
@@ -38,7 +38,7 @@
 		activitysByCondition
 	} from '@/common/http.api.js'
 	import {
-		publicImgPath
+		publicImgPath,
 	} from '@/common/interface.js'
 	import mixin from './infoMixin.js'
 	import myloading from '@/mycomponents/common/myLoading.vue'
@@ -137,10 +137,6 @@
 					this.loading = false
 					if (res.code == 200) {
 						if (res.data.activitys && res.data.activitys.length > 0) {
-							this.showlist = res.data.activitys.map(item => {
-								let data = publicImgPath + item.IImage
-								return data
-							})
 							this.infoList.push(...res.data.activitys)
 							this.pageNum++
 						} else {
@@ -156,13 +152,13 @@
 				this.cityShow = true
 			}
 		},
-		// created() {
-		// 	this.req_infoBanner(2)
-		// },
 		watch:{
 			updata(val){
 				this.infoList = val;
 			}
+		},
+		created(){
+			this.req_getImg(3)
 		}
 	}
 </script>
@@ -177,6 +173,8 @@
 			background: #ccc;
 			color: #fff;
 			text-align: center;
+			width: 100%;
+			height: 100%;
 		}
 	}
 

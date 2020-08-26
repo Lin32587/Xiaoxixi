@@ -32,7 +32,7 @@
 				}, {
 					name: '我的举报'
 				}],
-				currentTab: 0,
+				currentTab: 1,
 				reqdata: '',
 				accTitle: ''
 			}

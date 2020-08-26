@@ -16,7 +16,7 @@
 		</view>
 		<view class="bottom_box">
 			<view class="tags">
-				<view class="tag">{{udata.Keyword}}</view>
+				<view class="tag u-line-1">{{udata.Keyword}}</view>
 				<!-- <view class="tag" v-for="(item,idx) in tags" :class="idx==tags.length-1?'mt0':''" :key="item.name">#{{item.name}}</view> -->
 			</view>
 			<view class="time">{{udata.CreateAt|timeFilter(this)}}</view>
@@ -170,7 +170,7 @@
 				margin-right: 10rpx;
 				color: #6F7280;
 				font-size: 24rpx;
-
+				width: 400rpx;
 			}
 
 			.mt0 {

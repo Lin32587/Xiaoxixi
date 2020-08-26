@@ -1,6 +1,7 @@
 import {
 	infoType,
-	infoBanner
+	infoBanner,
+	getImg
 } from '@/common/http.api.js'
 import {
 	publicImgPath
@@ -51,19 +52,28 @@ let myMixin = {
 			this.req_activitysByCondition()
 		},
 		// 获取banner
-		// req_infoBanner(type) {
-		// 	let data = {
-		// 		ActivityId: type
-		// 	}
-		// 	infoBanner(data).then(res => {
-		// 		if (res.code == 200) {
-		// 			this.showlist = res.data.map(item => {
-		// 				let data = publicImgPath + item.Image
-		// 				return data
-		// 			})
-		// 		}
-		// 	})
-		// }
+		req_getImg(type) {
+			let data = {
+				typeNameId: type
+			}
+			getImg(data).then(res => {
+				if (res.code == 200) {
+					// this.showlist = res.data.map(item => {
+					// 	let data = publicImgPath + item.Image
+					// 	return data
+					// })
+					if(res.data.FirstImage){
+						this.showlist.push(publicImgPath + res.data.FirstImage)
+					}
+					if(res.data.SecondImage){
+						this.showlist.push(publicImgPath + res.data.SecondImage)
+					}
+					if(res.data.ThirdImage){
+						this.showlist.push(publicImgPath + res.data.ThirdImage)
+					}
+				}
+			})
+		}
 	},
 	created() {
 		this.req_infoType()

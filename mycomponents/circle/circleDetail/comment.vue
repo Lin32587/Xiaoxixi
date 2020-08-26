@@ -62,7 +62,7 @@
 			}
 		},
 		onLoad(){
-			this.date ? this.timeFilter(this.date) : ''
+			this.date ? this.timeFilter(this.date) : '';
 		}
 	}
 </script>

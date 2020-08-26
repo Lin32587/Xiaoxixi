@@ -1,10 +1,11 @@
 let env = process.env.NODE_ENV
 let baseUrl = ''
-// if (env === 'development') {
-// 	baseUrl = 'http://192.168.0.156:9033'
-// } else {
+if (env === 'development') {
+	// baseUrl = 'http://192.168.0.156:9033'
 	baseUrl = 'https://www.xiaoxixiplus.com/wxapp'
-// }
+} else {
+	baseUrl = 'https://www.xiaoxixiplus.com/wxapp'
+}
 // let baseUrl = 'http://120.78.79.186:8080'
 // let baseUrl = 'http://192.168.43.103:9033'  //热点
 // let baseUrl = '120.78.79.186:2375'  //docker

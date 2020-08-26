@@ -29,19 +29,19 @@
 						<image class="clear_ico" src="../static/img/clear.png" mode="" @click="form.school = ''"></image>
 					</view>
 					<u-input v-model="form.school" type="select" :border="false" @click="chooseSchool" v-else />
-<!-- 					<u-picker mode="selector" v-model="schoolShow" :range="schoolList" range-key="name" @confirm="regionConfirm"></u-picker> -->
+					<!-- 					<u-picker mode="selector" v-model="schoolShow" :range="schoolList" range-key="name" @confirm="regionConfirm"></u-picker> -->
 				</u-form-item>
 			</view>
 			<view class="brick_box">
 				<view class="title">地域</view>
 				<u-form-item prop="area" :label-width="0" :border-bottom="false">
-					<view class="u-flex" v-if="form.area" >
+					<view class="u-flex" v-if="form.area">
 						<u-input class="u-flex-1" v-model="form.area" :clearable="false" :border="false" @click="form.school ? '' : areaShow = true" />
 						<image class="clear_ico" src="../static/img/clear.png" mode="" @click="clearArea"></image>
 					</view>
 					<u-input v-model="form.area" type="select" :border="false" @click="form.school ? '' : areaShow = true" v-else />
 					<u-picker mode="region" v-model="areaShow" :area-code='["13", "1303", "130304"]' @confirm="regionConfirm"></u-picker>
-					
+
 					<!-- <u-action-sheet :list="areaList" v-model="areaShow" @click="areaCallback"></u-action-sheet> -->
 				</u-form-item>
 			</view>
@@ -92,7 +92,7 @@
 					typeid: '',
 					areaid: '',
 					describe: '',
-					school:''
+					school: ''
 				},
 				imgList: [],
 				rules: {
@@ -147,7 +147,7 @@
 				textContent: '写下您想发布的寻伴信息',
 				textAble: false,
 				postContent: '',
-				maxLength:0
+				maxLength: 0
 			};
 		},
 		watch: {
@@ -182,17 +182,19 @@
 			this.initMaxLength()
 		},
 		methods: {
-			initMaxLength(){
-				maxLength({types:'寻伴'}).then(res=>{
+			initMaxLength() {
+				maxLength({
+					types: '寻伴'
+				}).then(res => {
 					this.maxLength = res.data.Total
 				}).catch()
 			},
-			clearArea(){
+			clearArea() {
 				this.form.area = ''
 				this.form.areaid = ''
 			},
 			chooseSchool() {
-				if(!this.form.area){
+				if (!this.form.area) {
 					this.$u.route('/mine/schoolSearch')
 				}
 			},
@@ -345,8 +347,8 @@
 			padding-left: 20rpx;
 			border-left: solid 4rpx #393D46;
 		}
-			
-		.clear_ico{
+
+		.clear_ico {
 			width: 32rpx;
 			height: 32rpx;
 			margin-right: 16rpx;

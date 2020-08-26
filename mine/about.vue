@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<image :src="img" mode=""></image>
+		<image :src="publicImgPath+img" mode=""></image>
 	</view>
 </template>
 
@@ -8,10 +8,14 @@
 	import {
 		getImg
 	} from '@/common/http.api.js'
+	import {
+		publicImgPath
+	} from '@/common/interface.js'
 	export default {
 		data() {
 			return {
-				img:''
+				img:'',
+				publicImgPath:publicImgPath
 			};
 		},
 		onLoad() {
@@ -24,7 +28,8 @@
 
 <style lang="scss">
 image{
-	display: block;
-	width: 100%;
+	display: flex;
+	width: 100vw;
+	height: 100vh;
 }
 </style>

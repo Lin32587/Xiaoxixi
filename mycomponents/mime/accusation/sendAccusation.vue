@@ -82,7 +82,8 @@
 					fontSize: '36rpx',
 					color: '#1D3156'
 				},
-				modalshow: false
+				modalshow: false,
+				isFirst: true,
 			}
 		},
 		props: {
@@ -100,14 +101,19 @@
 			},
 			// 添加表单
 			submit() {
-				this.$refs.uForm.validate(valid => {
-					if (valid) {
-						this.req_addAcc()
-						// console.log('验证通过');
-					} else {
-						console.log('验证失败');
-					}
-				});
+				if (this.isFirst) {
+					this.isFirst = false;
+					this.$refs.uForm.validate(valid => {
+						if (valid) {
+							this.req_addAcc()
+							// console.log('验证通过');
+						} else {
+							console.log('验证失败');
+							this.isFirst = true;
+						}
+					});
+				}
+
 			},
 			// 获取理由
 			req_accReason() {
@@ -146,6 +152,8 @@
 				addAcc(data).then(res => {
 					if (res.code == 200) {
 						this.modalshow = true
+					} else {
+						this.isFirst = true
 					}
 				})
 			},

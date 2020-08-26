@@ -1,12 +1,14 @@
 <template>
 	<view class="wrapper">
 		<view class="msg_block" @click="toDynamic" v-if='unreadNum > 0'>
-			<view class="mini_avatar"></view>
+			<view class="mini_avatar">
+				<image :src="userImage"></image>
+			</view>
 			<view class="msg">您有{{unreadNum}}条最新消息</view>
 		</view>
 		<view class="msg_list">
 			<view class="msg_brick" v-for="(item,idx) in list" :key="idx" @click="toPage(item.PostId,item.PostType)">
-				<view class="date"><span class="strong">{{list.length - idx}}</span>{{item.time}}</view>
+				<view class="date"><span class="strong">{{item.CreateAt.substring(0,item.CreateAt.indexOf('T')).split("-")[2]}}</span>{{item.time}}</view>
 				<view class="avatar">
 					<image :src="item.Images"></image>
 				</view>
@@ -25,6 +27,7 @@
 
 <script>
 	import {
+		unReadMessage,
 		unReadMessageCount,
 		message
 	} from '@/common/http.api.js'
@@ -34,7 +37,8 @@
 				unreadNum: 0,
 				pageNum: 1,
 				list: [],
-				usersId: ''
+				usersId: '',
+				userImage: ''
 			}
 		},
 		methods: {
@@ -62,9 +66,10 @@
 						this.filters(res.data.message)
 						this.filterIni(res.data.message)
 						this.list.push(...res.data.message)
-						this.list.reverse()
 						if(res.data.totalPageNum > res.data.pageNum){
 							this.onLeadMessage()
+						}else{
+							this.image = res.data.message[0].Images
 						}
 					}
 				})
@@ -95,7 +100,18 @@
 					item.time = monthEnglish[new Date(new Date(item.CreateAt)).getMonth()]
 					// resData.yue = this.monthEnglish[new Date(new Date(item)).getMonth()]
 				})
-			}
+			},
+			req_unReadMessage(){
+				unReadMessage({
+					userId: this.usersId,
+					pageNum: 1,
+					pageSize: 1
+				}).then(res => {
+					if(res.code == 200){
+						this.userImage = res.data.message[0].Images
+					}
+				})
+			},
 		},
 		onLoad(){
 			uni.getStorage({
@@ -104,12 +120,15 @@
 			        this.usersId = res.data
 					this.req_message(this.pageNum)
 					this.req_unReadMessageCount()
+					this.req_unReadMessage()
 			    }
 			})
+			
 		},
 		onShow(){
 			if(this.usersId != ''){
 				this.req_unReadMessageCount()
+				this.req_unReadMessage()
 			}
 		}
 	}
@@ -132,8 +151,12 @@
 				width: 48rpx;
 				height: 48rpx;
 				border-radius: 50%;
-				background: #ccc;
 				margin-right: 22rpx;
+				overflow: hidden;
+				image{
+					width: 100%;
+					height: 100%;
+				}
 			}
 
 			.msg {
@@ -150,7 +173,8 @@
 
 		.msg_list {
 			border-radius: 20rpx;
-			padding: 50rpx;
+			//padding: 50rpx;
+			padding: 40rpx;
 			box-sizing: border-box;
 			background: #fff;
 			margin-top: 20rpx;
@@ -164,8 +188,11 @@
 					margin-right: 20rpx;
 
 					.strong {
+						display: inline-block;
+						width: 60rpx;
 						font-size: 40rpx;
 						font-weight: bold;
+						text-align: right;
 					}
 				}
 

@@ -171,7 +171,6 @@
 						openId: code
 					},
 					success(e) {
-						console.log('登录', e)
 						if (e.data.code == 200) {
 							console.log(e.data.data.Id)
 							if (e.data.data.ShowStatus == 1) {
@@ -179,7 +178,7 @@
 								setUserData(e.data.data, that)
 								that.initAllList()
 							} else {
-								this.gmyToast('登录失败')
+								that.gmyToast('登录失败')
 							}
 						}
 					},

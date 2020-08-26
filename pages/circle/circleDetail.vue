@@ -31,7 +31,7 @@
 				<!-- 转发 -->
 				<view v-if="activeType==0">
 					<comment :userdata="item.User" v-for="(item,idx) in transmitList" :key="idx">
-						<view class="m_bottom">{{item.User.username}}转发了您的帖子</view>
+						<view class="m_bottom">{{item.User.username}}转发了帖子</view>
 					</comment>
 				</view>
 				<!-- 评论 -->
@@ -50,18 +50,22 @@
 				<!-- 点赞 -->
 				<view v-if="activeType==2">
 					<comment :userdata="item.User" v-for="(item,idx) in likeList" :key="idx">
-						<view class="m_bottom">{{item.User.username}}点赞了您的帖子</view>
+						<view class="m_bottom">{{item.User.username}}点赞了帖子</view>
 					</comment>
 				</view>
 				<!-- 评论end -->
 				<myloading :loading="listLoading"></myloading>
 			</view>
 		</view>
-		<view class="handle_bar">
-			<navigator class="bar_item" @click="toTransmit" :url="'/pages/circle/transmit?item='+ encodeURIComponent(JSON.stringify(sayingData))">
+		<view class="handle_bar" v-if="checkAuth">
+			<!-- 	<navigator class="bar_item" @click="toTransmit" :url="'/pages/circle/transmit?item='+ encodeURIComponent(JSON.stringify(sayingData))">
 				<u-icon name="zhuanfa" color="#DADCE3" size="36"></u-icon>
 				<span>转发</span>
-			</navigator>
+			</navigator> -->
+			<button class="bar_item share_btn" open-type="share" @click="share" type="default">
+				<u-icon name="zhuanfa" color="#DADCE3" size="36"></u-icon>
+				<span>转发</span>
+			</button>
 			<view class="bar_item borders" @click="norComment">
 				<u-icon name="chat" color="#DADCE3" size="36"></u-icon>
 				<span>评论</span>
@@ -79,8 +83,8 @@
 					<text>仅楼主可见</text>
 				</view>
 				<view class="input_box">
-					<input v-if="isReply==false" v-model="resText" :cursor-spacing="300" placeholder="写下你的精彩评论吧~" />
-					<input v-else v-model="resText" :cursor-spacing="300" :placeholder="ReplyTarget+'写下你的精彩评论吧~'" />
+					<u-input v-if="isReply==false" v-model="resText" :cursor-spacing="300" placeholder="写下你的精彩评论吧~" />
+					<u-input v-else v-model="resText" :cursor-spacing="300" :placeholder="ReplyTarget+'写下你的精彩评论吧~'" />
 				</view>
 				<view v-show="resText.length==0" class="sendbtn">发送</view>
 				<view v-show="resText.length>0" @click="replyBtn" class="sendbtn_active">发送</view>
@@ -100,6 +104,7 @@
 		transmit,
 		addComment,
 		addReply,
+		addctransmit
 	} from "@/common/http.api.js";
 	import {
 		myToast,
@@ -115,6 +120,13 @@
 			comment,
 			editList,
 			myloading
+		},
+		computed: {
+			checkAuth: {
+				get() {
+					return this.$store.state.gAuth
+				}
+			}
 		},
 		filters: {
 			timeFilter(val) {
@@ -160,7 +172,15 @@
 				checked: false
 			};
 		},
-
+		onShareAppMessage(res) {
+			return {
+				title: `${this.sayingData.Content}`,
+				path: 'pages/circle/circleDetail?id=' + this.id,
+				imageUrl: '',
+				desc: '',
+				content: ''
+			}
+		},
 		watch: {
 			sayingData: {
 				immediate: true,
@@ -183,6 +203,12 @@
 			this.initCommentBox(true)
 		},
 		methods: {
+			share() {
+				addctransmit({
+					postId: parseInt(this.id),
+					userId: this.$store.state.gUserid
+				}).then().catch()
+			},
 			changeActive(idx) {
 				this.activeType = idx;
 				// this.pageIndex = 1
@@ -374,6 +400,7 @@
 				getLikeDetail(data).then(res => {
 					if (res.code == 200) {
 						this.handleAllList(2, res.data.likes)
+						console.log(this.likeList)
 					}
 				});
 			},
@@ -398,6 +425,7 @@
 				addLike(data).then(res => {
 					if (res.code == 200) {
 						this.sayingData.Like.IsLike = 1;
+						// this.req_getLikeDetail();
 						this.sayingData.LikeNum++
 					}
 				});
@@ -412,6 +440,8 @@
 				removeLike(data).then(res => {
 					if (res.code == 200) {
 						this.sayingData.Like.IsLike = 0;
+						this.likeList = ""
+						this.req_getLikeDetail();
 						this.sayingData.LikeNum--
 					}
 				});

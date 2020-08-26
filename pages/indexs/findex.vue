@@ -7,10 +7,10 @@
 			<classifyCom :norActive.sync="tabNameArr.typeActive" @typeIdx="typeTypeChange"></classifyCom>
 		</u-popup>
 		<view class="header_block">
-		<!-- 	<view class="search" @click="toSearchPage">
+			<view class="search" @click="toSearchPage">
 				<uni-icons type="search" color="#C5C9D2" size="20"></uni-icons>
 				<view class="placement">搜你想搜的~</view>
-			</view> -->
+			</view>
 			<view class="header">
 				<view @click="showCityEvent">
 					<arrBlockPure :title="tabNameArr.city"></arrBlockPure>

@@ -23,7 +23,6 @@ export let timefomat = (time, formater) => {
 	return fmt
 }
 
-
 export let myuniReq = (url, data, method) => {
 	return uni.request({
 		url: url,
@@ -44,19 +43,19 @@ export let filter = (dome) => {
 	dome.forEach((item)=>{
 		switch (item.ActionType) {
 			case 1:
-				item.text = '评论'
+				item.text = '评论您的帖子'
 				return
 			case 2:
 				item.text = '转发您的帖子'
 				return
 			case 3:
-				item.text = '给您点赞'
+				item.text = '点赞您的帖子'
 				return
 			case 4:
 				item.text = '发表帖子'
 				return
 			case 5:
-				item.text = '举报您'
+				item.text = '举报反馈结果'
 				return
 		}
 	})

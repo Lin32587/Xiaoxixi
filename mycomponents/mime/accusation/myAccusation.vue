@@ -3,7 +3,8 @@
 		<view class="card" v-for="(item,idx) in accinfoList" :key="idx" @click="toStep(item)">
 			<!-- <image :src="item."></image> -->
 			<view class="ph">
-				<u-icon size="100" name="photo" :color="$u.color['lightColor']"></u-icon>
+				<!-- <u-icon size="100" name="photo" :color="$u.color['lightColor']"></u-icon> -->
+				<image :src="picPath + item.Image[0].Image" class="accPh"></image>
 			</view>
 			<view class="right">
 				<view class="r_top">
@@ -20,6 +21,9 @@
 </template>
 
 <script>
+	import {
+		publicImgPath,
+	} from '@/common/interface.js'
 	import myloading from '@/mycomponents/common/myLoading.vue'
 	import {
 		accInformers
@@ -32,13 +36,14 @@
 			return {
 				accinfoList: [],
 				loading: false,
-				pageIdx: 1
+				pageIdx: 1,
+				picPath: publicImgPath
 			}
 		},
 		methods: {
 			toStep(item) {
 				uni.navigateTo({
-					url: '/mine/accusationSteps?status='+item.State
+					url: '/mine/accusationSteps?status=' + item.State
 				})
 			},
 			// 获取举报列表
@@ -55,6 +60,8 @@
 					this.loading = false
 					if (res.code == 200) {
 						if (res.data.informers && res.data.informers.length > 0) {
+							// this.picPath = publicImgPath + res.data.informers.Image[0].Image
+							// console.log(publicImgPath + res.data.informers.Image)
 							this.accinfoList.push(...res.data.informers)
 							this.pageIdx = res.data.pageNum + 1
 						}
@@ -108,6 +115,13 @@
 			background: rgb(244, 245, 246);
 			@include xCenter;
 			// background: #ccc;
+
+			.accPh {
+				display: block;
+				width: 220rpx;
+				height: 150rpx;
+				border-radius: 10rpx;
+			}
 		}
 
 		.right {
